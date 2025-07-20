@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TransferXL Fixed</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Sign-In Client Setup -->
+  <meta name="google-signin-client_id" content="386540408990-pnhj93gll9sqeea8hp28bqc9pb3ukve8.apps.googleusercontent.com">
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans">
+  <!-- Navbar -->
+  <nav class="bg-white shadow px-6 py-4 flex justify-between items-center">
+    <div class="text-2xl font-bold text-blue-600">TransferXL</div>
+    <div class="flex gap-4 items-center">
+      <a href="https://www.transferxl.com/about/" class="text-sm text-gray-600 hover:text-blue-600">About</a>
+      <a href="https://www.transferxl.com/plans/" class="text-sm text-gray-600 hover:text-blue-600">Plans</a>
+      <div id="g_id_onload"
+           data-client_id="386540408990-pnhj93gll9sqeea8hp28bqc9pb3ukve8.apps.googleusercontent.com"
+           data-context="signin"
+           data-ux_mode="redirect"
+           data-login_uri="https://www.transferxl.com"
+              data-callback="handleCredentialResponse"
+           data-auto_prompt="false">
+      </div>
+      <div class="g_id_signin"
+           data-type="standard"
+           data-size="large"
+           data-theme="outline"
+           data-text="sign_in_with"
+           data-shape="pill"
+           data-logo_alignment="left">
+      </div>
+    </div>
+  </nav>
+
+  <!-- Upload Section -->
+  <section class="mt-10 max-w-xl mx-auto px-6 py-8 bg-white shadow rounded">
+    <h2 class="text-xl font-semibold mb-4">Upload Files</h2>
+    <input id="fileInput" type="file" multiple
+      class="block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4
+             file:rounded-full file:border-0 file:bg-blue-50 file:text-blue-700
+             hover:file:bg-blue-100" />
+    <button id="uploadBtn"
+      class="mt-6 w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded">
+      Upload
+    </button>
+    <p id="uploadStatus" class="mt-4 text-green-600 hidden">Upload complete!</p>
+  </section>
+
+  <!-- About -->
+  <section id="about" class="text-center mt-20 px-4">
+    <h3 class="text-lg font-bold">About TransferXL</h3>
+    <p class="text-sm text-gray-600 mt-2">TransferXL is a fast, easy, and private way to share files online.</p>
+  </section>
+
+  <!-- Upload Mock Script -->
+  <script>
+    document.getElementById("uploadBtn").addEventListener("click", () => {
+      const input = document.getElementById("fileInput");
+      const status = document.getElementById("uploadStatus");
+
+      if (!input.files.length) {
+        alert("Please select a file first.");
+        return;
+      }
+
+      status.classList.remove("hidden");
+      status.textContent = "Uploading...";
+      setTimeout(() => {
+        status.textContent = "Upload complete!";
+      }, 2000);
+    });
+  </script>
+</body>
+</html>
+
+<!-- 🔥 This must be at the end -->
+<script>
+  function handleCredentialResponse(response) {
+    console.log("Encoded JWT ID token: " + response.credential);
+    // You can send this token to your backend for verification
+  }
+
+  window.onload = function () {
+    google.accounts.id.initialize({
+      client_id: "386540408990-pnhj93gll9sqeea8hp28bqc9pb3ukve8.apps.googleusercontent.com",
+      callback: handleCredentialResponse
+    });
+
+    // Optional: prompt user automatically
+    // google.accounts.id.prompt();
+  };
+</script>
