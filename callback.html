@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Google Login Callback</title>
+</head>
+<body>
+  <h2>Processing login...</h2>
+  <pre id="user-info">Loading...</pre>
+
+  <script>
+    // Utility to decode JWT token
+    function decodeJwt(token) {
+      const base64Url = token.split('.')[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+      }).join(''));
+
+      return JSON.parse(jsonPayload);
+    }
+
+    // Get the token from URL if present
+    const params = new URLSearchParams(window.location.hash.substring(1));
+    const id_token = params.get('id_token');
+
+    if (id_token) {
+      const userData = decodeJwt(id_token);
+      document.getElementById('user-info').textContent = JSON.stringify(userData, null, 2);
+    } else {
+      document.getElementById('user-info').textContent = 'No token found.';
+    }
+  </script>
+</body>
+</html>
